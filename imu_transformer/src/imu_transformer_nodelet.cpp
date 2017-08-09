@@ -20,7 +20,7 @@ namespace imu_transformer
     tf2_.reset(new tf2_ros::Buffer());
     tf2_listener_.reset(new tf2_ros::TransformListener(*tf2_));
 
-    imu_sub_.subscribe(nh_in_, "data", 10);
+    imu_sub_.subscribe(nh_in_, "imu", 10);
     imu_filter_.reset(new ImuFilter(imu_sub_, *tf2_, target_frame_, 10, nh_in_));
     imu_filter_->registerCallback(boost::bind(&ImuTransformerNodelet::imuCallback, this, _1));
     imu_filter_->registerFailureCallback(boost::bind(&ImuTransformerNodelet::failureCb, this, _2));
@@ -117,7 +117,7 @@ namespace imu_transformer
 
   void ImuTransformerNodelet::failureCb(tf2_ros::filter_failure_reasons::FilterFailureReason reason)
   {
-    NODELET_WARN_STREAM_THROTTLE(1.0, "Can't transform incoming IMU data to " << target_frame_ << " " << 
+    NODELET_WARN_STREAM_THROTTLE(1.0, "Can't transform incoming IMU data to " << target_frame_ << " " <<
         reason);
   }
 
